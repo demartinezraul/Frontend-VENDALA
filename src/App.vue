@@ -11,10 +11,16 @@
 </template>
 <script>
 import { FadeTransition } from "vue2-transitions";
+import Header from "./layout/starter/StarterHeader";
+import Footer from "./layout/starter/StarterFooter";
 
 export default {
+  name: 'app',
+
   components: {
-    FadeTransition
-  }
+    FadeTransition,
+    Header,
+    Footer
+  },
 };
 </script>

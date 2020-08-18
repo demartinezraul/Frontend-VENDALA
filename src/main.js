@@ -4,11 +4,18 @@ import router from "./router";
 import store from "./store";
 import { sync } from "vuex-router-sync";
 import Argon from "./plugins/argon-kit";
+import VueSweetalert2 from 'vue-sweetalert2'
+import Response from './services/Response';
+import VueResource from 'vue-resource';
+import 'jquery/dist/jquery.min.js';
 
 sync(store, router);
 
 Vue.config.productionTip = false;
 Vue.use(Argon);
+Vue.use(VueSweetalert2)
+Vue.use(Response)
+Vue.use(VueResource);
 new Vue({
   router,
   store,

@@ -179,12 +179,11 @@ export default {
 
       const user = {
         name: this.name.value,
-        surname: " ",
         email: this.email.value,
         password: this.password.value
       };
 
-      const url = "http://localhost:3000/api/users/signup";
+      const url = "http://localhost:3000/api/users/register";
 
       fetch(url, {
         method: "POST", // *GET, POST, PUT, DELETE, etc.

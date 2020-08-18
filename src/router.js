@@ -8,6 +8,12 @@ import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import Profile from "./views/Profile.vue";
 
+import Products from "@/views/Products";
+import ProductsCreate from '@/views/ProductsCreate';
+
+import Kits from "@/views/Kits";
+import KitsCreate from '@/views/KitsCreate';
+
 Vue.use(Router);
 
 export default new Router({
@@ -64,6 +70,42 @@ export default new Router({
       components: {
         header: AppHeader,
         default: Profile,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/products",
+      name: "products",
+      components: {
+        header: AppHeader,
+        default: Products,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/products/create",
+      name: "productsCreate",
+      components: {
+        header: AppHeader,
+        default: ProductsCreate,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/kits",
+      name: "kits",
+      components: {
+        header: AppHeader,
+        default: Kits,
+        footer: AppFooter
+      }
+    },
+    {
+      path: "/kits/create",
+      name: "kitsCreate",
+      components: {
+        header: AppHeader,
+        default: KitsCreate,
         footer: AppFooter
       }
     }

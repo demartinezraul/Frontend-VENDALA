@@ -13,34 +13,16 @@
         </div>
       </div>
 
-      <ul class="navbar-nav navbar-nav-hover align-items-lg-center">
-        <base-dropdown tag="li" class="nav-item">
-          <a
-            slot="title"
-            href="#"
-            class="nav-link"
-            data-toggle="dropdown"
-            role="button"
-          >
-            <i class="ni ni-collection d-lg-none"></i>
-            <span class="nav-link-inner--text">Examples</span>
-          </a>
-          <router-link to="/landing" class="dropdown-item">Landing</router-link>
-          <router-link to="/profile" class="dropdown-item">Profile</router-link>
-          <router-link to="/login" class="dropdown-item">Login</router-link>
-          <router-link to="/register" class="dropdown-item"
-            >Register</router-link
-          >
-          <router-link to="/components" class="dropdown-item"
-            >Components</router-link
-          >
-        </base-dropdown>
+      <ul v-if="user" class="navbar-nav navbar-nav-hover align-items-lg-center">
+<!--        <router-link to="/landing" class="nav-link">Landing</router-link>-->
+        <router-link to="/products" class="nav-link">Produtos</router-link>
+        <router-link to="/kits" class="nav-link">Kits</router-link>
+<!--        <router-link to="/register" class="nav-link">Register</router-link>-->
+<!--        <router-link to="/components" class="nav-link">Components</router-link>-->
       </ul>
       <ul v-if="user" class="navbar-nav align-items-lg-center ml-lg-auto">
         <li class="nav-item d-none d-lg-block ml-lg-4">
-          <router-link to="/" class="nav-link"
-            >{{ user.name }} {{ user.surname }}</router-link
-          >
+          {{ user.name }}
         </li>
         <li class="nav-item d-none d-lg-block ml-lg-4">
           <a href="#" @click="logout($event)" class="nav-link">Logout</a>
@@ -49,9 +31,6 @@
       <ul v-else class="navbar-nav align-items-lg-center ml-lg-auto">
         <li class="nav-item d-none d-lg-block ml-lg-4">
           <router-link to="/login" class="nav-link">Login</router-link>
-        </li>
-        <li class="nav-item d-none d-lg-block ml-lg-4">
-          <router-link to="/register" class="nav-link">Register</router-link>
         </li>
       </ul>
     </base-nav>
@@ -62,6 +41,7 @@ import BaseNav from "@/components/BaseNav";
 import BaseDropdown from "@/components/BaseDropdown";
 import Cookies from "../utils/Cookies";
 import jwtDecode from "jwt-decode";
+import router from "@/router";
 
 export default {
   components: {
@@ -87,7 +67,7 @@ export default {
 
       /* First we remove the token in order to stop logging the user on app start-up */
       console.log(Cookies.remove("token"));
-
+      router.push("/");
       /* Then we clear the user object from our store */
       return this.$store.dispatch("LOGOUT");
     }
