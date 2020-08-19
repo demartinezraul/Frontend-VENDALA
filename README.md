@@ -1,5 +1,12 @@
 # FRONT-END
 
+## Setting up a development environment
+
+* create a file named .env (copy .env.example file) which should contain the following default setup ( you should provide your own values to this variables ):
+```
+VUE_APP_API_URL= 
+```
+
 ## Scripts
 
 **Install Modules**
