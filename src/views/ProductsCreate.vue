@@ -20,7 +20,6 @@
                 <div class="card-header bg-white border-0">
                   <div class="row align-items-center">
                     <div class="col-8">
-                      <div v-if="loading">Carregando...</div>
                       <h3 class="mb-0">New Product</h3>
                     </div>
                   </div>
@@ -28,26 +27,26 @@
                 <div class="col-12">
                   <div class="form-group ">
                     <label>Name</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" id="name" v-model="name">
                   </div>
                   <div class="form-group ">
                     <label>Description</label>
-                    <textarea class="form-control" id="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" rows="3" v-model="description"></textarea>
                   </div>
                   <div class="form-group ">
                     <label>Price</label>
-                    <input type="number" class="form-control">
+                    <input type="number" class="form-control" v-model="price">
                   </div>
                   <div class="form-group">
-                    <label for="images">Imagens:</label>
-                    <input required data-fileuploader-fileMaxSize="10" type="file" name="images" id="images">
+                    <label>Images:</label>
+                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()"/>
                   </div>
                   <div class="form-group">
                     <label>Categories:</label>
                     <div v-if="loading">Carregando...</div>
                     <treeselect
                         :options="options"
-                        v-model="category"
+                        v-model="category_id"
                         :disable-branch-nodes="true"
                         :show-count="true"
                         :normalizer="normalizer"
@@ -87,8 +86,12 @@ export default {
   },
   data() {
     return {
+      name: '',
+      description: '',
+      price: '',
+      files: [],
+      category_id: null,
       loading: true,
-      category: null,
       options: [],
       normalizer(node) {
         return {
@@ -113,16 +116,33 @@ export default {
   methods: {
     create() {
       try {
-        this.$http.post(`${app.service.api}/api/products/store`, {headers: http.header()})
+        let formData = new FormData();
+        for( let i = 0; i < this.files.length; i++ ) {
+          formData.append('images[]', this.files[i]);
+        }
+        formData.append('name', this.name);
+        formData.append('description', this.description);
+        formData.append('price', this.price);
+        formData.append('category_id', this.category_id);
+        this.$http.post(`${app.service.api}/api/products/store`, formData,{headers: http.header()})
             .then((response) => {
-              // TODO: Continue process;
+              const processed = this.$response.process(response);
+              this.$swal.fire(
+                  '',
+                  processed.message,
+                  'success',
+              );
+
+              if (processed.data.success) {
+                this.$router.push({ name: 'products' });
+              }
             }).catch((response) => {
-          const processed = this.$response.process(response);
-          this.$swal.fire(
-              'Oops!',
-              processed.message,
-              'error',
-          );
+              const processed = this.$response.process(response);
+              this.$swal.fire(
+                  'Oops!',
+                  processed.message,
+                  'error',
+              );
         });
       } catch (error) {
         const processed = this.$response.process(error.response);
@@ -133,7 +153,22 @@ export default {
         );
       }
     },
+    handleFiles(){
+      let uploadedFiles = this.$refs.files.files;
+      for(var i = 0; i < uploadedFiles.length; i++) {
+        this.files.push(uploadedFiles[i]);
+      }
+    }
   }
 };
 </script>
-<style></style>
+<style>
+  #my-strictly-unique-vue-upload-multiple-image {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+</style>

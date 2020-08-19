@@ -20,7 +20,6 @@
                 <div class="card-header bg-white border-0">
                   <div class="row align-items-center">
                     <div class="col-8">
-                      <div v-if="loading">Carregando...</div>
                       <h3 class="mb-0">New Kit</h3>
                     </div>
                   </div>
@@ -28,13 +27,23 @@
                 <div class="col-12">
                   <div class="form-group ">
                     <label>Name</label>
-                    <input type="text" class="form-control">
+                    <input type="text" class="form-control" id="name" v-model="data.name">
                   </div>
                   <div class="form-group ">
                     <label>Products</label>
-                    <select class="form-control">
-                      <option>--</option>
-                    </select>
+                    <div v-if="loading">Carregando...</div>
+                    <multiselect
+                        v-model="data.selections"
+                        :options="products"
+                        label="name"
+                        track-by="name"
+                        :hide-selected="true"
+                        :close-on-select="false"
+                        :searchable="true"
+                        :multiple="true"
+                        :custom-label="customLabel"
+                        placeholder="Selections products">
+                    </multiselect>
                   </div>
                   <div class="form-group text-right">
                     <router-link :to="{ name: 'kits' }" class="btn btn-link">
@@ -56,24 +65,60 @@
 </template>
 <script>
 
+import axios from "axios";
 import app from '@/config/app';
 import http from '@/config/http';
+import Multiselect from 'vue-multiselect'
 
 export default {
   name: 'kitsCreate',
+  components: {
+    Multiselect,
+  },
   data() {
     return {
       loading: true,
-      kits: []
+      data: {
+        name: '',
+        selections: [],
+        products: [],
+      },
+      kits: [],
+      products: [],
     }
   },
-
+  mounted() {
+    axios
+        .get(`${app.service.api}/api/products`, {headers: http.header()})
+        .then(response => {
+          this.products = response.data.data;
+        })
+        .catch(error => {
+          alert(error)
+        })
+        .finally(() => this.loading = false)
+  },
   methods: {
     create() {
       try {
-        this.$http.post(`${app.service.api}/api/kits/store`, {headers: http.header()})
+        let dados = this.data.selections;
+        let products = [];
+        for (var i=0; i<dados.length; i++) {
+          products[i] = dados[i].id;
+        }
+        this.data.products = products;
+        this.$http.post(`${app.service.api}/api/kits/store`, this.data,{headers: http.header()})
             .then((response) => {
-              // TODO: Continue process;
+              const processed = this.$response.process(response);
+              this.$swal.fire(
+                  '',
+                  processed.message,
+                  'success',
+              );
+
+              if (processed.data.success) {
+                this.$router.push({ name: 'kits' });
+              }
             }).catch((response) => {
           const processed = this.$response.process(response);
           this.$swal.fire(
@@ -90,6 +135,9 @@ export default {
             'error',
         );
       }
+    },
+    customLabel ({ id, name }) {
+      return `#${id} – ${name}`
     },
   }
 };

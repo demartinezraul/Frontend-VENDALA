@@ -36,33 +36,30 @@
                     <tr>
                       <th class="text-center">#</th>
                       <th>Name</th>
-                      <th>Description</th>
-                      <th>Price</th>
-                      <th class="text-right">Category</th>
                       <th class="text-right">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="product in products" :key="product.id">
-                      <td class="text-center">{{ product.id }}</td>
-                      <td>{{ product.name }}</td>
-                      <td>{{ product.description }}</td>
-                      <td>{{ product.price }}</td>
-                      <td class="text-right">{{ product.category.name }}</td>
+                    <tr v-for="kit in kits" :key="kit.id">
+                      <td class="text-center">{{ kit.id }}</td>
+                      <td>{{ kit.name }}</td>
                       <td class="td-actions text-right">
                         <button type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm"
                                 data-original-title=""
                                 title=""
-                                v-on:click="destroy(product.id)">
+                                v-on:click="destroy(kit.id)">
                           <i class="ni ni-fat-remove pt-1"></i>
                         </button>
                       </td>
+                    </tr>
+                    <tr v-if="!kits.length" class="text-center">
+                      <td colspan="3">No Records Found.</td>
                     </tr>
                     </tbody>
                   </table>
                 </div>
                 <paginator ref="paginator"
-                           :origem="'products'"
+                           :origem="'kits'"
                            :resource_url="resource_url"
                            @update="updateResource"></paginator>
               </div>
@@ -81,22 +78,22 @@ import http from '@/config/http';
 import Paginator from '@/components/Paginator';
 
 export default {
-  name: 'products',
+  name: 'kits',
   components: {
     Paginator
   },
   data() {
     return {
-      resource_url: `${app.service.api}/api/products`,
-      products: [],
+      resource_url: `${app.service.api}/api/kits`,
+      kits: [],
       loading: true,
     };
   },
   mounted() {
     axios
-        .get(`${app.service.api}/api/products`, {headers: http.header()})
+        .get(`${app.service.api}/api/kits`, {headers: http.header()})
         .then(response => {
-          this.products = response.data.data;
+          this.kits = response.data.data;
         })
         .catch(error => {
           console.log(error)
@@ -105,8 +102,8 @@ export default {
   },
 
   methods: {
-    updateResource(products) {
-      this.products = products.data;
+    updateResource(kits) {
+      this.kits = kits.data;
     },
 
     async destroy(id) {
@@ -120,15 +117,15 @@ export default {
       });
       if (result === true) {
         try {
-          this.$http.delete(`${app.service.api}/api/products/destroy/${id}`, {headers: http.header()})
+          this.$http.delete(`${app.service.api}/api/kits/destroy/${id}`, {headers: http.header()})
               .then((response) => {
                 this.$refs.paginator.fetchData();
               }).catch((response) => {
             const processed = this.$response.process(response);
             this.$swal.fire(
-                'Oops!',
+                '',
                 processed.message,
-                'error',
+                'success',
             );
           });
         } catch (error) {

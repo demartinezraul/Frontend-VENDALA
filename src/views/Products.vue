@@ -58,6 +58,9 @@
                         </button>
                       </td>
                     </tr>
+                    <tr v-if="!products.length" class="text-center">
+                      <td colspan="3">No Records Found.</td>
+                    </tr>
                     </tbody>
                   </table>
                 </div>

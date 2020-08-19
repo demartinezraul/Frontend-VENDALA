@@ -8,6 +8,8 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import Response from './services/Response';
 import VueResource from 'vue-resource';
 import 'jquery/dist/jquery.min.js';
+import 'sweetalert2/dist/sweetalert2.min.css';
+import 'vue-multiselect/dist/vue-multiselect.min.css';
 
 sync(store, router);
 
