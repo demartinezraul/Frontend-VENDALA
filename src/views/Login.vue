@@ -22,7 +22,9 @@
           >
             <template>
               <div class="text-center text-muted mb-4">
-                <h2>VENDA.LA</h2>
+                <h2>
+                  <img src="img/brand/logo.png" />
+                </h2>
               </div>
               <form role="form">
                 <base-input
