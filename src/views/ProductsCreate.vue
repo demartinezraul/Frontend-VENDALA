@@ -35,7 +35,8 @@
                   </div>
                   <div class="form-group ">
                     <label>Price</label>
-                    <input type="number" class="form-control" v-model="price">
+<!--                    <input type="number" class="form-control" v-model="price">-->
+                    <money class="form-control" v-model="price" v-bind="money"></money>
                   </div>
                   <div class="form-group">
                     <label>Images:</label>
@@ -76,12 +77,14 @@
 import axios from "axios";
 import app from '@/config/app';
 import http from '@/config/http';
+import {Money} from 'v-money'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   name: 'productsCreate',
   components: {
+    Money,
     Treeselect
   },
   data() {
@@ -93,6 +96,14 @@ export default {
       category_id: null,
       loading: true,
       options: [],
+      money: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2,
+        masked: false
+      },
       normalizer(node) {
         return {
           label: node.name,

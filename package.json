@@ -19,6 +19,7 @@
     "select2": "^4.0.12",
     "serve": "^11.3.2",
     "serve-static": "^1.13.2",
+    "v-money": "^0.8.1",
     "vue": "^2.5.16",
     "vue-flatpickr-component": "^7.0.4",
     "vue-lazyload": "^1.2.6",

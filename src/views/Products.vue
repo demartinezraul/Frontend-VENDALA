@@ -47,7 +47,7 @@
                       <td class="text-center">{{ product.id }}</td>
                       <td>{{ product.name }}</td>
                       <td>{{ product.description }}</td>
-                      <td>{{ product.price }}</td>
+                      <td>R$ {{ formatPrice(product.price) }}</td>
                       <td class="text-right">{{ product.category.name }}</td>
                       <td class="td-actions text-right">
                         <button type="button" rel="tooltip" class="btn btn-danger btn-icon btn-sm"
@@ -59,7 +59,7 @@
                       </td>
                     </tr>
                     <tr v-if="!products.length" class="text-center">
-                      <td colspan="3">No Records Found.</td>
+                      <td colspan="6">No Records Found.</td>
                     </tr>
                     </tbody>
                   </table>
@@ -110,6 +110,11 @@ export default {
   methods: {
     updateResource(products) {
       this.products = products.data;
+    },
+
+    formatPrice(value) {
+      let val = (value/1).toFixed(2).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
     },
 
     async destroy(id) {
